@@ -1,20 +1,9 @@
 const { ApolloServer, gql } = require('apollo-server');
+const { readSchema } = require('./schema');
+const { resolvers } = require('./resolvers.js');
 
-// Define  API schema
-const typeDefs = gql`
-	type Query {
-		appName: String
-	}
-`;
+const typeDefs = readSchema();
 
-//  Define resolvers to process the queries
-const resolvers = {
-	Query: {
-		appName: () => 'ProductHunt clone',
-	},
-};
-
-//  Create a new instance of the apollo server
 const server = new ApolloServer({
 	typeDefs,
 	resolvers,
