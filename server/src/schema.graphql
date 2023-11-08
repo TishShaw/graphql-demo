@@ -2,6 +2,7 @@ type Query {
 	appName: String
 	allProducts: [Product!]!
 	productsByAuthor(authorName: String!): [Product!]!
+	productsByCategory(slug: String!): [Product!]!
 }
 
 type User {
@@ -17,4 +18,11 @@ type Product {
 	numberOfVotes: Int!
 	publishedAt: String!
 	author: User!
+	categories: [Category!]!
+}
+
+type Category {
+	id: ID!
+	slug: String!
+	name: String!
 }

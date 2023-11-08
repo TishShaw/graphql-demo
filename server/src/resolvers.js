@@ -5,8 +5,8 @@ const productsData = [
 		url: 'https://educative.io/',
 		numberOfVotes: 10,
 		publishedAt: '2021-04-05',
-		// Reference to "ellen"
 		authorId: '1',
+		categoriesIds: ['1'],
 	},
 	{
 		name: 'Apollo',
@@ -14,8 +14,8 @@ const productsData = [
 		url: 'https://www.apollographql.com/',
 		numberOfVotes: 5,
 		publishedAt: '2021-01-08',
-		// Reference to "peter"
 		authorId: '2',
+		categoriesIds: ['2', '3'],
 	},
 	{
 		name: 'OneGraph',
@@ -23,8 +23,8 @@ const productsData = [
 		url: 'https://www.onegraph.com',
 		numberOfVotes: 5,
 		publishedAt: '2020-08-22',
-		// Reference to "ellen"
 		authorId: '1',
+		categoriesIds: ['3'],
 	},
 ];
 const usersData = [
@@ -40,27 +40,56 @@ const usersData = [
 	},
 ];
 
+const categoriesData = [
+	{
+		id: '1',
+		slug: 'education',
+		name: 'Education',
+	},
+	{
+		id: '2',
+		slug: 'frameworks',
+		name: 'Frameworks',
+	},
+	{
+		id: '3',
+		slug: 'api',
+		name: 'API',
+	},
+];
+
 const resolvers = {
 	Query: {
 		appName: () => 'ProductHunt clone',
+
 		allProducts: () => {
 			return productsData;
 		},
-		productsByAuthor: (_, args) => {
-			const user = usersData.find((user) => user.userName === args.authorName);
+		productsByAuthor: (_, { authorName }) => {
+			const user = usersData.find((user) => user.userName === authorName);
 			return productsData.filter((product) => product.authorId === user.id);
 		},
+		productsByCategory: (_, { slug }) => {
+			const category = categoriesData.find(
+				(category) => category.slug === slug
+			);
+			return productsData.filter((product) =>
+				product.categoriesIds.includes(category.id)
+			);
+		},
 	},
+
 	Product: {
 		author: (product) => {
 			return usersData.find((user) => user.id === product.authorId);
 		},
+		categories: (product) => {
+			const res = product.categoriesIds.map((categoryId) => {
+				return categoriesData.find((category) => category.id === categoryId);
+			});
+			return res;
+		},
 	},
-	// User: {
-	// 	organization: (user) => {
-	// 		// get an organization for a user
-	// 	},
-	// },
 };
 
 module.exports = {
