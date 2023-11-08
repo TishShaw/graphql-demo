@@ -1,6 +1,13 @@
 type Query {
 	appName: String
 	allProducts: [Product!]!
+	productsByAuthor(authorName: String!): [Product!]!
+}
+
+type User {
+	id: ID!
+	userName: String!
+	fullName: String!
 }
 
 type Product {
@@ -9,4 +16,5 @@ type Product {
 	url: String!
 	numberOfVotes: Int!
 	publishedAt: String!
+	author: User!
 }
